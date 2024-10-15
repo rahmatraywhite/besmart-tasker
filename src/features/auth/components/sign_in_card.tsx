@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Separator } from "@radix-ui/react-dropdown-menu"
 import Link from "next/link"
 import { loginSchema } from "../schema"
-import useLogin from "../api/use-login"
+import { useLogin } from "../api/use-login"
 
 const SignInCard = () => {
   const { mutate } = useLogin()

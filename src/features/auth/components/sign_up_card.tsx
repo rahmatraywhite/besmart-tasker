@@ -10,15 +10,13 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { SelectSeparator } from "@/components/ui/select";
+import { registerSchema } from "../schema";
+import { useRegister } from "../api/use-register";
 
-const formSchema = z.object({
-    name: z.string().trim().min(2, "Name is required"),
-    email: z.string().trim().min(1, "Email is required").email(),
-    password: z.string().min(8, "Required minimum of 8 characters"),
-})
 const SignUpCard = () => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const { mutate } = useRegister()
+    const form = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
             name: "",
             email: "",
@@ -26,8 +24,8 @@ const SignUpCard = () => {
         }
     })
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data)
+    const onSubmit = (values: z.infer<typeof registerSchema>) => {
+        mutate({ json: values })
     }
     return (
         <Card className="w-full h-full md:w-[487px] border-none shadow-none">
