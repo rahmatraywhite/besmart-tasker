@@ -1,3 +1,5 @@
+"use client"
+
 import { z } from "zod"
 import { DottedSeparator } from "@/components/dotted-separator"
 import { Button } from "@/components/ui/button"
@@ -14,7 +16,7 @@ import { loginSchema } from "../schema"
 import { useLogin } from "../api/use-login"
 
 const SignInCard = () => {
-  const { mutate } = useLogin()
+  const { mutate, isPending } = useLogin()
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -46,6 +48,7 @@ const SignInCard = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={isPending}
                       type="email"
                       placeholder="Enter email address"
                     />
@@ -62,6 +65,7 @@ const SignInCard = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={isPending}
                       type="password"
                       placeholder="Enter password"
                     />
@@ -70,7 +74,7 @@ const SignInCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={false} size="lg" className="w-full">Sign In</Button>
+            <Button disabled={isPending} size="lg" className="w-full">Sign In</Button>
           </form>
         </Form>
       </CardContent>
@@ -78,11 +82,11 @@ const SignInCard = () => {
         <DottedSeparator />
       </div>
       <CardContent className="p-7 flex flex-col gap-y-4">
-        <Button disabled={false} size="lg" className="w-full" variant="secondary">
+        <Button disabled={isPending} size="lg" className="w-full" variant="secondary">
           <FcGoogle className="mr-2 size-5" />
           Login with Google
         </Button>
-        <Button disabled={false} size="lg" className="w-full" variant="secondary">
+        <Button disabled={isPending} size="lg" className="w-full" variant="secondary">
           <FaGithub className="mr-2 size-5" />
           Login with Github
         </Button>

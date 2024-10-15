@@ -38,12 +38,12 @@ export const sessionMiddleware = createMiddleware<AdditionalContext>(
         }
         client.setSession(session)
 
-        const accout = new Account(client)
+        const account = new Account(client)
         const databases = new Databases(client)
         const storage = new Storage(client)
-        const user = await accout.get()
+        const user = await account.get()
 
-        c.set("account", accout)
+        c.set("account", account)
         c.set("databases", databases)
         c.set("storage", storage)
         c.set("user", user)
