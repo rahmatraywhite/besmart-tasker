@@ -10,24 +10,23 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Separator } from "@radix-ui/react-dropdown-menu"
 import Link from "next/link"
-
-const formSchema = z.object({
-  email: z.string().trim().min(1, "Email is required").email(),
-  password: z.string().min(8, "Required minimum of 8 characters"),
-})
+import { loginSchema } from "../schema"
+import useLogin from "../api/use-login"
 
 const SignInCard = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { mutate } = useLogin()
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     }
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+    mutate({ json: values })
   }
+
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
