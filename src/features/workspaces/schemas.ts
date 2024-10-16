@@ -1,5 +1,6 @@
 import { z } from "zod";
 
-export const createWorkspacesSchema = z.object({
+export const createWorkspaceSchema = z.object({
     name: z.string().trim().min(1, "Required"),
-})
+    image: z.any().optional(),
+});

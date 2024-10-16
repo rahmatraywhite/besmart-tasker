@@ -62,7 +62,7 @@ export const UserButton = () => {
                     onClick={() => logout()}
                     className="h-10 flex items-center justify-center cursor-pointer text-red-700 font-medium">
                     <LogOut className="mr-2 size-4" />
-                    Logout
+                    Log out
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
