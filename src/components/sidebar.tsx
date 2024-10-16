@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Separator } from "./ui/separator"
 import { Navigation } from "./navigation"
+import WorkspaceSwtcher from "./workspace-swtcher"
 
 const Sidebar = () => {
     return (
@@ -9,6 +10,8 @@ const Sidebar = () => {
             <Link href="/">
                 <Image src="/logo.svg" width={164} height={48} alt="logo" />
             </Link>
+            <Separator className="my-4" />
+            <WorkspaceSwtcher />
             <Separator className="my-4" />
             <Navigation />
         </aside>
