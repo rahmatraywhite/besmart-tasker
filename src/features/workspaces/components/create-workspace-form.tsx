@@ -9,11 +9,11 @@ import { Separator } from "@/components/ui/separator"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useCreateWorkspace } from "../api/use-create-workspace"
 import { useRef } from "react"
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ImageIcon } from "lucide-react"
+import { useCreateWorkspace } from "../api/use-create-workspace"
 
 interface createWorkspaceFormProps {
     onCancel?: () => void
@@ -21,6 +21,7 @@ interface createWorkspaceFormProps {
 
 export const CreateWorkspaceForm = ({ onCancel }: createWorkspaceFormProps) => {
     const inputRef = useRef<HTMLInputElement>(null)
+
     const { mutate, isPending } = useCreateWorkspace()
     const form = useForm<z.infer<typeof createWorkspaceSchema>>({
         resolver: zodResolver(createWorkspaceSchema),
@@ -34,7 +35,8 @@ export const CreateWorkspaceForm = ({ onCancel }: createWorkspaceFormProps) => {
             ...values,
             image: values.image instanceof File ? values.image : "",
         }
-        mutate({ form: values }, {
+
+        mutate({ form: finalValues }, {
             onSuccess: () => {
                 form.reset()
             }
