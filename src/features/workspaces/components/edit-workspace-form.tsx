@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { createWorkspaceSchema } from "../schemas"
+import { updateWorkspaceSchema } from "../schemas"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -12,32 +12,35 @@ import { Button } from "@/components/ui/button"
 import { useRef } from "react"
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { ImageIcon } from "lucide-react"
-import { useCreateWorkspace } from "../api/use-create-workspace"
-import { cn } from "@/lib/utils"
+import { ArrowLeftIcon, ImageIcon } from "lucide-react"
+import { Workspace } from "../types"
+import { useRouter } from "next/navigation"
+import { useUpdateWorkspace } from "../api/use-update-workspace"
 
-interface createWorkspaceFormProps {
+interface EditeWorkspaceFormProps {
     onCancel?: () => void
+    initialValue: Workspace
 }
 
-export const CreateWorkspaceForm = ({ onCancel }: createWorkspaceFormProps) => {
+export const EditWorkspaceForm = ({ onCancel, initialValue }: EditeWorkspaceFormProps) => {
     const inputRef = useRef<HTMLInputElement>(null)
-
-    const { mutate, isPending } = useCreateWorkspace()
-    const form = useForm<z.infer<typeof createWorkspaceSchema>>({
-        resolver: zodResolver(createWorkspaceSchema),
+    const router = useRouter()
+    const { mutate, isPending } = useUpdateWorkspace()
+    const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
+        resolver: zodResolver(updateWorkspaceSchema),
         defaultValues: {
-            name: "",
+            ...initialValue,
+            image: initialValue.imageUrl ?? "",
         },
     })
 
-    const onSubmit = (values: z.infer<typeof createWorkspaceSchema>) => {
+    const onSubmit = (values: z.infer<typeof updateWorkspaceSchema>) => {
         const finalValues = {
             ...values,
             image: values.image instanceof File ? values.image : "",
         }
 
-        mutate({ form: finalValues }, {
+        mutate({ form: finalValues, param: { workspaceId: initialValue.$id } }, {
             onSuccess: () => {
                 form.reset()
             }
@@ -53,9 +56,13 @@ export const CreateWorkspaceForm = ({ onCancel }: createWorkspaceFormProps) => {
 
     return (
         <Card className="w-full h-full border-none shadow-none">
-            <CardHeader className="flex p-7">
-                <CardTitle className="text-xl font-bold">
-                    Create a new workspace
+            <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
+                <Button size='sm' variant='secondary' onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValue.$id}`)}>
+                    <ArrowLeftIcon className="size-4 mr-2" />
+                    Back
+                </Button>
+                <CardTitle className="text-lg font-bold">
+                    {initialValue.name}
                 </CardTitle>
             </CardHeader>
             <div className="px-7">
@@ -154,12 +161,12 @@ export const CreateWorkspaceForm = ({ onCancel }: createWorkspaceFormProps) => {
                                 )}
                             />
                             <Separator className="my-7" />
-                            <div className="flex items-center justify-between">
-                                <Button className={cn(!onCancel && "invisible")} disabled={isPending} type="button" size="lg" variant="secondary" onClick={onCancel}>
+                            <div className="flex items-center justify-center">
+                                {/* <Button className={cn(!onCancel && "invisible")} disabled={isPending} type="button" size="lg" variant="secondary" onClick={onCancel}>
                                     Cancel
-                                </Button>
+                                </Button> */}
                                 <Button disabled={isPending} type="submit" size="lg" onClick={onCancel}>
-                                    Create Workspace
+                                    Save Changes
                                 </Button>
                             </div>
                         </div>

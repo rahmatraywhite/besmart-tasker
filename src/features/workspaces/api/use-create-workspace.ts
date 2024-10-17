@@ -5,7 +5,7 @@ import { client } from "@/lib/rpc";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-type ResponseType = InferResponseType<typeof client.api.workspaces["$post"]>;
+type ResponseType = InferResponseType<typeof client.api.workspaces["$post"], 200>;
 type RequestType = InferRequestType<typeof client.api.workspaces["$post"]>;
 
 export const useCreateWorkspace = () => {
@@ -23,12 +23,12 @@ export const useCreateWorkspace = () => {
             }
             return await response.json()
         },
-        onSuccess: (data) => {
+        onSuccess: ({ data }) => {
             toast.success("Workspace created")
             queryClient.invalidateQueries({
                 queryKey: ["workspaces"],
             })
-            router.push(`/workspaces/${data.data.$id}`);
+            router.push(`/workspaces/${data.$id}`);
         },
         onError: () => {
             toast.error("Failed to create workspace")
