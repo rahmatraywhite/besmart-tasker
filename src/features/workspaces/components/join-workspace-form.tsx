@@ -14,7 +14,6 @@ import Link from "next/link"
 import { useInviteCode } from "../hooks/use-invite-code"
 import { useWorkspaceId } from "../hooks/use-workspace-id"
 import { useJoinWorkspace } from "../api/use-join-workspace"
-import { useInvitedCode } from "../hooks/useInviteCode"
 
 interface JoinWorkspaceFormProps {
     intialValues: {
@@ -26,7 +25,7 @@ export const JoinWorkspaceForm = ({
 }: JoinWorkspaceFormProps) => {
     const router = useRouter()
     const workspaceId = useWorkspaceId()
-    const inviteCode = useInvitedCode()
+    const inviteCode = useInviteCode()
 
     const { mutate, isPending } = useJoinWorkspace()
 
