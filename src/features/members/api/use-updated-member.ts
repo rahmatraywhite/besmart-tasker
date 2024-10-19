@@ -7,7 +7,7 @@ import { toast } from "sonner";
 type ResponseType = InferResponseType<typeof client.api.members[":memberId"]["$patch"], 200>;
 type RequestType = InferRequestType<typeof client.api.members[":memberId"]["$patch"]>;
 
-export const useUpdateMember = () => {
+export const useUpdatedMember = () => {
     const queryClient = useQueryClient()
     const mutation = useMutation<
         ResponseType,
@@ -22,7 +22,7 @@ export const useUpdateMember = () => {
             return await response.json()
         },
         onSuccess: () => {
-            toast.success("Member updated")
+            toast.success("member updated")
             queryClient.invalidateQueries({ queryKey: ["members"], })
         },
         onError: () => {

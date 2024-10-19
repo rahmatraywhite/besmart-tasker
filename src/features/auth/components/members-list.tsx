@@ -9,11 +9,12 @@ import { ArrowLeftIcon, MoreVerticalIcon } from "lucide-react"
 import Link from "next/link"
 import { Fragment } from "react"
 import { MemberAvatar } from "./member-avatar"
+import { MemberRole } from "@/features/members/types"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useDeleteMember } from "@/features/members/api/use-delete-member"
 import { useUpdateMember } from "@/features/members/api/use-update-member"
-import { MemberRole } from "@/features/members/types"
 import { useConfirm } from "@/hooks/use-confirm"
+import { useUpdatedMember } from "@/features/members/api/use-updated-member"
 
 const MembersList = () => {
     const workspaceId = useWorkspaceId()
@@ -23,13 +24,12 @@ const MembersList = () => {
     )
     const { data } = useGetMember({ workspaceId })
     const { mutate: deleteMember, isPending: isDeletingMember } = useDeleteMember()
-    const { mutate: updateMember, isPending: isUpdatingMember } = useUpdateMember()
+    const { mutate: updateMember, isPending: isUpdatingMember } = useUpdatedMember()
 
-    const handleUpdateMember = async (memberId: string, role: MemberRole) => {
-        updateMember({ param: { memberId }, json: { role } }, {
-            onSuccess: () => {
-                window.location.reload()
-            }
+    const handleUpdateMember = (memberId: string, role: MemberRole) => {
+        updateMember({
+            json: { role },
+            param: { memberId },
         })
     }
 
@@ -43,6 +43,7 @@ const MembersList = () => {
             }
         })
     }
+
 
     return (
         <Card className="w-full h-full border-none shadow-none">
@@ -82,11 +83,12 @@ const MembersList = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent side="bottom" align="end">
                                     <DropdownMenuItem className="font-medium"
-                                        onClick={() => { }} disabled={false}>
+                                        onClick={() => handleUpdateMember(member.$id, MemberRole.ADMIN)}
+                                        disabled={isUpdatingMember}>
                                         Set as Administrator
                                     </DropdownMenuItem>
                                     <DropdownMenuItem className="font-medium"
-                                        onClick={() => handleUpdateMember(member.$id, MemberRole.ADMIN)} disabled={isUpdatingMember}>
+                                        onClick={() => handleUpdateMember(member.$id, MemberRole.MEMBER)} disabled={isUpdatingMember}>
                                         Set as Member
                                     </DropdownMenuItem>
                                     <DropdownMenuItem className="font-medium text-red-700"

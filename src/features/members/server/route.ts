@@ -132,7 +132,7 @@ const app = new Hono()
                 return c.json({ error: "Unauthorized" }, 401)
             }
 
-            if (member.$id !== MemberRole.ADMIN) {
+            if (member.role !== MemberRole.ADMIN) {
                 return c.json({ error: "Unauthorized" }, 401)
             }
 
