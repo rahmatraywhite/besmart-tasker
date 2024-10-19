@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Separator } from "./ui/separator"
 import { Navigation } from "./navigation"
 import WorkspaceSwtcher from "./workspace-swtcher"
+import Projects from "./projects"
 
 const Sidebar = () => {
     return (
@@ -14,6 +15,8 @@ const Sidebar = () => {
             <WorkspaceSwtcher />
             <Separator className="my-4" />
             <Navigation />
+            <Separator className="my-4" />
+            <Projects />
         </aside>
     )
 }
