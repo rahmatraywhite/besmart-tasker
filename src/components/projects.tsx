@@ -24,7 +24,7 @@ const Projects = () => {
                 <RiAddCircleFill onClick={open} className="size-5 text-neutral-400 cursor-pointer hover:opacity-75 transition" />
             </div>
             {data?.documents.map((project) => {
-                const href = `/workspaces/${workspaceId}/projects/${projectId}`
+                const href = `/workspaces/${workspaceId}/projects/${project.$id}`
                 const isActive = pathname === href
                 return (
                     <Link href={href} key={project.$id}>
